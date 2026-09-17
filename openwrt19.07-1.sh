@@ -5,6 +5,13 @@
 # This is free software, licensed under the MIT License.
 # See /LICENSE for more information.
 sed -i 's|https://github.com/Lienol/openwrt-luci.git;17.01|https://github.com/coolsnowwolf/luci.git;master|' feeds.conf.default
+# ==================== 彻底移除不兼容 feeds ====================
+sed -i '/lienol/d' feeds.conf.default
+sed -i '/other/d' feeds.conf.default
+sed -i '/helloworld/d' feeds.conf.default
+sed -i '/small8/d' feeds.conf.default
+sed -i '/kenzok8/d' feeds.conf.default
+# ============================================================
 # 增加软件包
 #sed -i 's#github.com/immortalwrt/packages.git;openwrt-21.02#github.com/yuos-bit/other.git;immortalwrt-packages-21.02#' feeds.conf.default
 #sed -i 's#github.com/immortalwrt/luci.git;openwrt-21.02#github.com/yuos-bit/other.git;immortalwrt-luci-21.02#' feeds.conf.default
