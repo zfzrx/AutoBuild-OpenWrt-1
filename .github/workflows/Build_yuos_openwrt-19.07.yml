@@ -334,10 +334,13 @@ jobs:
         keep_minimum_runs: 4
 
     - name: 删除历史记录
-      uses: dev-drprasad/delete-older-releases@v0.3.5
-      if: github.event.inputs.UPLOAD_RELEASE == 'true'
-      with:
-        keep_latest: 3
-        delete_tags: true
+      if: github.event.inputs.UPLOAD_RELEASE == 'true' && !cancelled()
+      run: |
+        echo "开始清理旧 Releases，只保留最新 3 个..."
+        gh release list --limit 100 --json tagName --jq '.[3:] | .[].tagName' | while read tag; do
+          echo "删除 Release: $tag"
+          gh release delete "$tag" --yes || true
+          git push origin :refs/tags/"$tag" || true
+        done
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
